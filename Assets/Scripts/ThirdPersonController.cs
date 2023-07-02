@@ -1,4 +1,6 @@
-﻿ using UnityEngine;
+﻿using System;
+using Unity.VisualScripting;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -14,6 +16,10 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+
+        public static event Action OnAxeThrow;
+        public static event Action OnAxeAim;
+
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -49,6 +55,10 @@ namespace StarterAssets
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
+
+        [Header("Player Aiming")]
+        [Tooltip("If the character is Aiming or not.")]
+        public bool Aiming = false;
 
         [Tooltip("Useful for rough ground")]
         public float GroundedOffset = -0.14f;
@@ -97,6 +107,8 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+        private int _animIDAim;
+        private int _animIDThrow;
 
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
@@ -159,6 +171,8 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            Aim();
+            Throw();
         }
 
         private void LateUpdate()
@@ -173,6 +187,39 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDThrow = Animator.StringToHash("Throw");
+            _animIDAim = Animator.StringToHash("Aim");
+        }
+
+
+        private void Aim()
+        {
+            if (Input.GetMouseButton(1))
+            {
+                Aiming = true;
+                _animator.SetBool(_animIDAim, Aiming);
+
+            }
+            else
+            {
+                Aiming = false;
+                _animator.SetBool(_animIDAim, Aiming);
+            }
+            
+        }
+
+        private void Throw()
+        {
+            if (Input.GetMouseButtonDown(0) && Aiming)
+            {
+                OnAxeThrow?.Invoke();
+                _animator.SetBool(_animIDThrow, true);
+               
+            }
+            else
+            {
+                _animator.SetBool(_animIDThrow, false);
+            }
         }
 
         private void GroundedCheck()
@@ -375,7 +422,7 @@ namespace StarterAssets
             {
                 if (FootstepAudioClips.Length > 0)
                 {
-                    var index = Random.Range(0, FootstepAudioClips.Length);
+                    var index = UnityEngine.Random.Range(0, FootstepAudioClips.Length);
                     AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
                 }
             }

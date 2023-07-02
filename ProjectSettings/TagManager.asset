@@ -9,6 +9,7 @@ TagManager:
   - Hex
   - Open
   - Point
+  - wall
   layers:
   - Default
   - TransparentFX
