@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/HyperCasual/Standard.unity
-    guid: 01aa58fccad5a5d4b90fc4b495b142e5
-  - enabled: 1
     path: Assets/MultiPlayerLearning/Standard.unity
     guid: b3d0e80b942ea744195e46b75ed0bd6f
   m_configObjects:
