@@ -10,6 +10,7 @@ TagManager:
   - Open
   - Point
   - wall
+  - Ground
   layers:
   - Default
   - TransparentFX
