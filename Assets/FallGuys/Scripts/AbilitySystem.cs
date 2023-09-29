@@ -26,10 +26,11 @@ public class AbilitySystem : MonoBehaviour
             case AbilityState.active:
                 if (Input.GetKeyDown(key))
                 {
-                    Ability.Use(gameObject);
-                    state = AbilityState.coolDown;
-                    cooldownTime = Ability.CoolDownTime;
-                    
+                    if (Ability.Use(gameObject)){
+                        state = AbilityState.coolDown;
+                        cooldownTime = Ability.CoolDownTime;
+                    }
+    
                 }
                 break;
             case AbilityState.coolDown:

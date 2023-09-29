@@ -8,5 +8,5 @@ public abstract class Ability : ScriptableObject
     public string AbilityDescription;
     public float CoolDownTime;
 
-    public abstract void Use(GameObject player);
+    public abstract bool Use(GameObject player);
 }

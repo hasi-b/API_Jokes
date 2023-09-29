@@ -21,7 +21,7 @@ public class PlayerKick : Ability
     // The key to trigger the kick.
 
 
-    public override void Use(GameObject player)
+    public override bool Use(GameObject player)
     {
         // Create a ray from the player's position in the forward direction.
         ray = new Ray(player.transform.position + new Vector3(0f, 1f, 0f), player.transform.forward);
@@ -42,10 +42,12 @@ public class PlayerKick : Ability
             {
                 // Apply a force to the hit object in the direction of the ray.
                 hitRigidbody.AddForce(ray.direction * kickForce, ForceMode.Impulse);
+                return true;
             }
         }
 
         // Draw the ray with the determined color and thickness.
         Debug.DrawLine(ray.origin, ray.origin + ray.direction * kickRange, rayColor, 0.5f);
+        return false;
     }
 }
