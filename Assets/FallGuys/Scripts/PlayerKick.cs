@@ -1,7 +1,10 @@
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class PlayerKick : MonoBehaviour
+[CreateAssetMenu]
+public class PlayerKick : Ability
 {
+   
     [SerializeField] 
     float kickForce = 10f;          // The force of the kick.
     [SerializeField]  
@@ -17,24 +20,15 @@ public class PlayerKick : MonoBehaviour
     #endregion
     // The key to trigger the kick.
 
-    void Update()
-    {
-        // Check if the kick key is pressed.
-        if (Input.GetKeyDown(kickKey))
-        {
-            // Perform the kick action.
-            PerformKick();
-        }
-    }
 
-    void PerformKick()
+    public override void Use(GameObject player)
     {
         // Create a ray from the player's position in the forward direction.
-        ray = new Ray(transform.position + new Vector3(0f,1f,0f), transform.forward);
-        
+        ray = new Ray(player.transform.position + new Vector3(0f, 1f, 0f), player.transform.forward);
+
 
         // Set the default color to red.
-        
+
 
         // Cast the ray and check if it hits an object within the kick range.
         if (Physics.Raycast(ray, out hit, kickRange))
