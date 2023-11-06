@@ -11,6 +11,8 @@ public class PlaneController : MonoBehaviour
     private float originalY;
     private Quaternion initialRotation;
     private Rigidbody rb;
+    [SerializeField]
+    ParticleSystem destroyParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -59,8 +61,15 @@ public class PlaneController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collision Detected with: " + collision.gameObject.name);
-        // Add collision handling logic here
-        // Example: You can stop the movement or apply a force to the object on collision
+        if (collision.gameObject.tag == "wall")
+        {
+            this.gameObject.SetActive(false);
+            destroyParticle.gameObject.transform.position = transform.position + new Vector3(0f, 0f, 4f);
+            destroyParticle.Play();
+            Destroy(this);
+            // Add collision handling logic here
+            // Example: You can stop the movement or apply a force to the object on collision
+        }
     }
-   
+
 }
