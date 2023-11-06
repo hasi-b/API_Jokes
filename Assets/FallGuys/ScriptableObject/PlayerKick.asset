@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AbilityName: Kick
   AbilityDescription: Kicks the player infront of it
-  CoolDownTime: 10
+  CoolDownTime: 3
   kickForce: 10
   kickRange: 3
   kickKey: 102
