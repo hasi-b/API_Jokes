@@ -33,6 +33,7 @@ namespace StarterAssets
 
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
+        public float SensitivityCamera = 1f;
 
         public AudioClip LandingAudioClip;
         public AudioClip[] FootstepAudioClips;
@@ -194,24 +195,25 @@ namespace StarterAssets
 
         private void Aim()
         {
-            if (Input.GetMouseButton(1))
+            if (_input.aim)
             {
                 Aiming = true;
-                _animator.SetBool(_animIDAim, Aiming);
+                _animator.SetLayerWeight(1,Mathf.Lerp(_animator.GetLayerWeight(1),1f,Time.deltaTime*10f));
 
             }
             else
             {
                 Aiming = false;
-                _animator.SetBool(_animIDAim, Aiming);
+                _animator.SetLayerWeight(1, Mathf.Lerp(_animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
             }
             
         }
 
         private void Throw()
         {
-            if (Input.GetMouseButtonDown(0) && Aiming)
+            if (Input.GetMouseButton(0) && Aiming)
             {
+                
                 OnAxeThrow?.Invoke();
                 _animator.SetBool(_animIDThrow, true);
                
@@ -245,8 +247,8 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier *SensitivityCamera;
+                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * SensitivityCamera;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -414,6 +416,11 @@ namespace StarterAssets
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
+        }
+
+        public void SetSensitivity(float sensitivity)
+        {
+            SensitivityCamera = sensitivity;
         }
 
         private void OnFootstep(AnimationEvent animationEvent)
